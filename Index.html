@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Loading Screen</title>
+    
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <style>
+        body {
+            background-color: black;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; 
+            font-family: sans-serif;
+            color: white;
+        }
+
+        /* Loading Screen Styles */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; 
+            opacity: 1;
+            transition: opacity 1s ease-out;
+        }
+
+        #loading-screen.fade-out {
+            opacity: 0;
+            visibility: hidden; 
+        }
+
+        .spinner {
+            border: 8px solid rgba(255, 255, 255, 0.3);
+            border-top: 8px solid #ffffff; 
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+    
+        .yt-embed-holder{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            pointer-events: none; 
+            opacity: 0; 
+            transition: opacity 0.5s ease-in;
+        }
+
+        .yt-embed-holder.visible {
+            opacity: 1;
+        }
+        
+        .yt-embed-holder iframe{
+            width: 100%; 
+            height: 100%;
+        }
+
+        /* Button Styling */
+        #unmuteButton {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10; 
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            opacity: 0; 
+            transition: opacity 0.5s ease-in;
+        }
+
+        #unmuteButton.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <h1>Loading...</h1>
+    </div>
+
+    <div class ="yt-embed-holder">
+        <iframe id="yt-video-player" width="560" height="315" 
+        src="https://www.youtube.com/embed/lYVLKF2cooA?si=f_hZj0fM_vRVYoWb&autoplay=1&mute=1&loop=1&controls=0&color=white&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&playlist=lYVLKF2cooA" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" 
+        allowfullscreen>
+        </iframe>
+    </div>
+
+    <button id="unmuteButton">Click to UNMUTE Video</button>
+
+    <script>
+        var player;
+        var loadingScreen = document.getElementById('loading-screen');
+        var ytHolder = document.querySelector('.yt-embed-holder');
+        var unmuteBtn = document.getElementById('unmuteButton');
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('yt-video-player', {
+                events: {
+                    'onReady': onPlayerReady 
+                }
+            });
+        }
+        
+        function onPlayerReady(event) {
+            // Once the YouTube player is ready, start the loading screen timer
+            setTimeout(hideLoadingScreen, 5000); // 5 seconds
+            unmuteBtn.addEventListener('click', unmuteVideo);
+        }
+
+        function hideLoadingScreen() {
+            loadingScreen.classList.add('fade-out'); // Start fade-out animation
+            // After the fade-out transition, reveal the video and button
+            loadingScreen.addEventListener('transitionend', () => {
+                ytHolder.classList.add('visible'); // Fade in video
+                unmuteBtn.classList.add('visible'); // Fade in button
+            }, { once: true });
+        }
+
+        function unmuteVideo() {
+            if (player && player.isMuted()) {
+                player.unMute();
+                unmuteBtn.style.display = 'none'; // Hide the button
+            }
+        }
+    </script>
+</body>
+</html>
