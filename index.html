@@ -108,7 +108,7 @@
 
     <div class ="yt-embed-holder">
         <iframe id="yt-video-player" width="560" height="315" 
-        src="https://www.youtube.com/embed/lYVLKF2cooA?si=f_hZj0fM_vRVYoWb&autoplay=1&mute=1&loop=1&controls=0&color=white&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&playlist=lYVLKF2cooA" 
+        src="https://www.youtube.com/embed/b8hdFLGAjac?si=4-Hd4QGUB4sfYLsG&autoplay=1&mute=1&loop=1&controls=0&color=white&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&playlist=b8hdFLGAjac" 
         title="YouTube video player" 
         frameborder="0" 
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -154,6 +154,19 @@
                 unmuteBtn.style.display = 'none'; // Hide the button
             }
         }
+
+            // Automatically skip YouTube ads
+    function autoSkipAds() {
+        const skipButton = document.querySelector('.ytp-ad-skip-button, .ytp-ad-skip-button-modern');
+        if (skipButton) {
+            skipButton.click();
+            console.log('Ad skipped automatically!');
+        }
+    }
+
+    // Run every 500ms to check for ads
+    setInterval(autoSkipAds, 6000);
+
     </script>
 </body>
 </html>
